@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// MTOPREV - Sistema de Gestión de Mantenimiento Preventivo
+// Esquema completo de base de datos
 
 generator client {
   provider = "prisma-client-js"
@@ -13,20 +10,447 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// ==================== CATÁLOGOS BASE ====================
+
+model CentroCosto {
+  id          String   @id @default(cuid())
+  codigo      String   @unique
+  nombre      String
+  descripcion String?
+  presupuesto Float?
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relaciones
+  materiales        Material[]
+  equipos           Equipo[]
+  solicitudes       SolicitudMantenimiento[]
+  mantenimientos    MantenimientoPreventivo[]
+  movimientosStock  MovimientoStock[]
+
+  @@map("centros_costo")
 }
 
-model Post {
+model CategoriaMaterial {
+  id          String   @id @default(cuid())
+  nombre      String   @unique
+  descripcion String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  materiales Material[]
+
+  @@map("categorias_material")
+}
+
+model Area {
+  id          String   @id @default(cuid())
+  codigo      String   @unique
+  nombre      String
+  descripcion String?
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  solicitudes SolicitudMantenimiento[]
+  equipos     Equipo[]
+  personal    Personal[]
+
+  @@map("areas")
+}
+
+// ==================== STOCK DE MATERIALES ====================
+
+model Material {
+  id              String   @id @default(cuid())
+  codigo          String   @unique
+  nombre          String
+  descripcion     String?
+  categoriaId     String?
+  stockActual     Float    @default(0)
+  stockMinimo     Float    @default(0)
+  unidad          String   @default("unidades")
+  precio          Float?
+  ubicacion       String?
+  centroCostoId   String?
+  activo          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relaciones
+  categoria          CategoriaMaterial?   @relation(fields: [categoriaId], references: [id])
+  centroCosto        CentroCosto?         @relation(fields: [centroCostoId], references: [id])
+  movimientos        MovimientoStock[]
+  insumosSolicitados InsumoSolicitado[]
+
+  @@map("materiales")
+}
+
+model MovimientoStock {
+  id          String   @id @default(cuid())
+  materialId  String
+  tipo        String   // ENTRADA, SALIDA, AJUSTE
+  cantidad    Float
+  motivo      String?
+  referencia  String?  // Número de solicitud u OT
+  stockAnterior Float
+  stockNuevo    Float
+  centroCostoId String?
+  usuario      String?
+  fecha       DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  // Relaciones
+  material    Material      @relation(fields: [materialId], references: [id])
+  centroCosto CentroCosto?  @relation(fields: [centroCostoId], references: [id])
+
+  @@map("movimientos_stock")
+}
+
+// ==================== HERRAMIENTAS ====================
+
+model Herramienta {
+  id                String   @id @default(cuid())
+  codigo            String   @unique
+  nombre            String
+  tipo              String   // MANUAL, ELECTRICA, MEDICION, ESPECIAL
+  estado            String   @default("DISPONIBLE") // DISPONIBLE, EN_USO, MANTENIMIENTO, BAJA
+  ubicacion         String?
+  fechaAdquisicion  DateTime?
+  fechaCalibracion  DateTime?
+  proximaCalibracion DateTime?
+  responsableId     String?  // Personal que la tiene prestada
+  observaciones     String?
+  activo            Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relaciones
+  responsable    Personal?           @relation(fields: [responsableId], references: [id])
+  prestamos      PrestamoHerramienta[]
+  calibraciones  CalibracionHerramienta[]
+
+  @@map("herramientas")
+}
+
+model PrestamoHerramienta {
+  id            String    @id @default(cuid())
+  herramientaId String
+  personalId    String
+  fechaPrestamo DateTime  @default(now())
+  fechaDevolucion DateTime?
+  devuelto      Boolean   @default(false)
+  observaciones String?
+  recibidoPor   String?
+  createdAt     DateTime  @default(now())
+
+  // Relaciones
+  herramienta Herramienta @relation(fields: [herramientaId], references: [id])
+  personal    Personal    @relation(fields: [personalId], references: [id])
+
+  @@map("prestamos_herramienta")
+}
+
+model CalibracionHerramienta {
+  id              String   @id @default(cuid())
+  herramientaId   String
+  fechaCalibracion DateTime @default(now())
+  proximaCalibracion DateTime?
+  resultado       String   // APROBADO, RECHAZADO, AJUSTADO
+  observaciones   String?
+  certificado     String?  // URL o referencia al certificado
+  realizadoPor    String?
+  costo           Float?
+  createdAt       DateTime @default(now())
+
+  // Relaciones
+  herramienta Herramienta @relation(fields: [herramientaId], references: [id])
+
+  @@map("calibraciones_herramienta")
+}
+
+// ==================== PERSONAL ====================
+
+model Personal {
+  id            String   @id @default(cuid())
+  legajo        String   @unique
+  nombre        String
+  apellido      String
+  especialidad  String?  // MECANICO, ELECTRICISTA, OPERADOR, ETC
+  turno         String?  // MAÑANA, TARDE, NOCHE
+  telefono      String?
+  email         String?
+  areaId        String?
+  fechaIngreso  DateTime?
+  activo        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relaciones
+  area                   Area?                  @relation(fields: [areaId], references: [id])
+  herramientasPrestadas  Herramienta[]
+  prestamosHerramienta   PrestamoHerramienta[]
+  solicitudesAsignadas   SolicitudMantenimiento[] @relation("SolicitudesAsignado")
+  historialTrabajos      HistorialTrabajo[]
+
+  @@map("personal")
+}
+
+model HistorialTrabajo {
+  id            String   @id @default(cuid())
+  personalId    String
+  solicitudId   String
+  fechaInicio   DateTime @default(now())
+  fechaFin      DateTime?
+  horasTrabajo  Float?
+  observaciones String?
+  createdAt     DateTime @default(now())
+
+  // Relaciones
+  personal  Personal             @relation(fields: [personalId], references: [id])
+  solicitud SolicitudMantenimiento @relation(fields: [solicitudId], references: [id])
+
+  @@map("historial_trabajos")
+}
+
+// ==================== EQUIPOS ====================
+
+model Equipo {
+  id              String   @id @default(cuid())
+  codigo          String   @unique
+  nombre          String
+  marca           String?
+  modelo          String?
+  numeroSerie     String?
+  areaId          String?
+  ubicacion       String?
+  fechaInstalacion DateTime?
+  centroCostoId   String?
+  frecuenciaMantenimiento Int? // en días
+  ultimoMantenimiento DateTime?
+  proximoMantenimiento DateTime?
+  estado          String   @default("OPERATIVO") // OPERATIVO, EN_MANTENIMIENTO, FUERA_SERVICIO
+  activo          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relaciones
+  area              Area?                  @relation(fields: [areaId], references: [id])
+  centroCosto       CentroCosto?           @relation(fields: [centroCostoId], references: [id])
+  solicitudes       SolicitudMantenimiento[]
+  mantenimientos    MantenimientoPreventivo[]
+  tareasMantenimiento TareaMantenimiento[]
+
+  @@map("equipos")
+}
+
+model TareaMantenimiento {
+  id              String   @id @default(cuid())
+  equipoId        String
+  descripcion     String
+  frecuencia      Int      // en días
+  tiempoEstimado  Float?   // en horas
+  instrucciones   String?
+  activo          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relaciones
+  equipo               Equipo                  @relation(fields: [equipoId], references: [id])
+  checklistsMantenimiento ChecklistMantenimiento[]
+
+  @@map("tareas_mantenimiento")
+}
+
+// ==================== SOLICITUDES DE MANTENIMIENTO ====================
+
+model SolicitudMantenimiento {
+  id                    String   @id @default(cuid())
+  numero                String   @unique
+  fechaSolicitud        DateTime @default(now())
+  solicitante           String
+  solicitanteId         String?  // ID del personal si aplica
+  areaId                String?
+  equipoId              String?
+  tipoMantenimiento     String   // PREVENTIVO, CORRECTIVO, EMERGENCIA
+  descripcionProblema   String
+  prioridad             String   @default("MEDIA") // ALTA, MEDIA, BAJA
+  estado                String   @default("PENDIENTE")
+  
+  // Fechas de seguimiento
+  fechaAprobacion       DateTime?
+  fechaInicioTrabajo    DateTime?
+  fechaFinTrabajo       DateTime?
+  fechaCierre           DateTime?
+  
+  // Usuarios de seguimiento
+  aprobadoPor           String?
+  asignadoAId           String?
+  cerradoPor            String?
+  
+  // Observaciones y cierre
+  observaciones         String?
+  observacionesCierre   String?
+  trabajoRealizado      String?
+  
+  // Centro de costo
+  centroCostoId         String?
+  
+  // Costos
+  costoMateriales       Float?
+  costoManoObra         Float?
+  costoTotal            Float?
+  
+  // Tiempos
+  tiempoRespuesta       Float?   // horas
+  tiempoEjecucion       Float?   // horas
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relaciones
+  area                  Area?                  @relation(fields: [areaId], references: [id])
+  equipo                Equipo?                @relation(fields: [equipoId], references: [id])
+  centroCosto           CentroCosto?           @relation(fields: [centroCostoId], references: [id])
+  asignadoA             Personal?              @relation("SolicitudesAsignado", fields: [asignadoAId], references: [id])
+  insumosSolicitados    InsumoSolicitado[]
+  historialEstados      HistorialEstadoSolicitud[]
+  historialTrabajos     HistorialTrabajo[]
+  checklistItems        ChecklistItem[]
+
+  @@map("solicitudes_mantenimiento")
+}
+
+model InsumoSolicitado {
+  id                String   @id @default(cuid())
+  solicitudId       String
+  materialId        String
+  cantidadSolicitada Float
+  cantidadRecibida  Float    @default(0)
+  estado            String   @default("PENDIENTE") // PENDIENTE, SOLICITADO, RECIBIDO, CANCELADO
+  fechaSolicitud    DateTime @default(now())
+  fechaLlegada      DateTime?
+  recibidoPor       String?
+  observaciones     String?
+  precioUnitario    Float?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relaciones
+  solicitud SolicitudMantenimiento @relation(fields: [solicitudId], references: [id])
+  material  Material               @relation(fields: [materialId], references: [id])
+
+  @@map("insumos_solicitados")
+}
+
+model HistorialEstadoSolicitud {
+  id            String   @id @default(cuid())
+  solicitudId   String
+  estadoAnterior String?
+  estadoNuevo   String
+  fechaCambio   DateTime @default(now())
+  usuario       String?
+  comentario    String?
+  createdAt     DateTime @default(now())
+
+  // Relaciones
+  solicitud SolicitudMantenimiento @relation(fields: [solicitudId], references: [id])
+
+  @@map("historial_estado_solicitud")
+}
+
+// ==================== MANTENIMIENTO PREVENTIVO ====================
+
+model MantenimientoPreventivo {
+  id              String   @id @default(cuid())
+  numeroOT        String   @unique
+  equipoId        String
+  fechaProgramada DateTime
+  fechaEjecucion  DateTime?
+  estado          String   @default("PROGRAMADO") // PROGRAMADO, EN_EJECUCION, COMPLETADO, CANCELADO
+  tipo            String   @default("PREVENTIVO")
+  centroCostoId   String?
+  
+  // Detalles de ejecución
+  trabajoRealizado String?
+  observaciones    String?
+  ejecutadoPor     String?
+  horasTrabajo     Float?
+  costoMateriales  Float?
+  costoManoObra    Float?
+  
+  // Solicitud relacionada (si se genera)
+  solicitudId     String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relaciones
+  equipo         Equipo        @relation(fields: [equipoId], references: [id])
+  centroCosto    CentroCosto?  @relation(fields: [centroCostoId], references: [id])
+  checklist      ChecklistMantenimiento[]
+
+  @@map("mantenimientos_preventivos")
+}
+
+model ChecklistMantenimiento {
+  id                  String   @id @default(cuid())
+  mantenimientoId     String?
+  tareaId             String
+  completado          Boolean  @default(false)
+  observaciones       String?
+  fechaCompletado     DateTime?
+  completadoPor       String?
+  createdAt           DateTime @default(now())
+
+  // Relaciones
+  mantenimiento MantenimientoPreventivo? @relation(fields: [mantenimientoId], references: [id])
+  tarea         TareaMantenimiento        @relation(fields: [tareaId], references: [id])
+
+  @@map("checklist_mantenimiento")
+}
+
+model ChecklistItem {
+  id              String   @id @default(cuid())
+  solicitudId     String
+  descripcion     String
+  completado      Boolean  @default(false)
+  observaciones   String?
+  fechaCompletado DateTime?
+  completadoPor   String?
+  orden           Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  // Relaciones
+  solicitud SolicitudMantenimiento @relation(fields: [solicitudId], references: [id])
+
+  @@map("checklist_items")
+}
+
+// ==================== REPORTES Y CONFIGURACIÓN ====================
+
+model Configuracion {
   id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  clave     String   @unique
+  valor     String
+  tipo      String   @default("TEXTO") // TEXTO, NUMERO, BOOLEANO, JSON
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("configuraciones")
+}
+
+model LogSistema {
+  id          String   @id @default(cuid())
+  modulo      String
+  accion      String
+  descripcion String?
+  usuario     String?
+  datos       String?  // JSON
+  ip          String?
+  fecha       DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@map("logs_sistema")
 }

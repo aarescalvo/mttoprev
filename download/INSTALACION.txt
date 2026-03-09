@@ -1,0 +1,329 @@
+================================================================================
+                    MTOPREV - GUÍA DE INSTALACIÓN DETALLADA
+                 Sistema de Gestión de Mantenimiento Preventivo
+                              Versión 1.0.0
+================================================================================
+
+ÍNDICE
+------
+1. REQUISITOS DEL SISTEMA
+2. INSTALACIÓN PARA DESARROLLO
+3. GENERACIÓN DEL INSTALADOR (.EXE)
+4. INSTALACIÓN EN EQUIPOS DE USUARIO
+5. CONFIGURACIÓN DE RED LOCAL
+6. PRIMEROS PASOS
+7. RESOLUCIÓN DE PROBLEMAS
+8. SOPORTE TÉCNICO
+
+
+================================================================================
+1. REQUISITOS DEL SISTEMA
+================================================================================
+
+REQUISITOS MÍNIMOS:
+-------------------
+• Sistema Operativo: Windows 10 (64-bit) o superior
+• Procesador: Intel Core i3 o equivalente
+• Memoria RAM: 4 GB
+• Espacio en disco: 500 MB
+• Resolución de pantalla: 1366 x 768
+
+REQUISITOS RECOMENDADOS:
+-----------------------
+• Sistema Operativo: Windows 11 (64-bit)
+• Procesador: Intel Core i5 o superior
+• Memoria RAM: 8 GB
+• Espacio en disco: 1 GB
+• Resolución de pantalla: 1920 x 1080
+
+PARA DESARROLLO/COMPILACIÓN:
+---------------------------
+• Node.js v20.x o superior (https://nodejs.org)
+• npm v10.x o bun v1.x
+• Git (https://git-scm.com)
+• Visual Studio Code (recomendado)
+
+
+================================================================================
+2. INSTALACIÓN PARA DESARROLLO
+================================================================================
+
+PASO 1: CLONAR O DESCARGAR EL PROYECTO
+--------------------------------------
+Si tiene acceso al repositorio Git:
+    git clone https://github.com/su-empresa/mtoprev.git
+    cd mtoprev
+
+O descargue el archivo ZIP del proyecto y extraígalo en una carpeta local.
+
+PASO 2: INSTALAR DEPENDENCIAS
+-----------------------------
+Abra una terminal (PowerShell o CMD) en la carpeta del proyecto:
+
+Con npm:
+    npm install
+
+O con bun (más rápido):
+    bun install
+
+PASO 3: CONFIGURAR BASE DE DATOS
+-------------------------------
+El proyecto utiliza SQLite, que no requiere instalación adicional.
+
+Crear la base de datos:
+    npx prisma generate
+    npx prisma db push
+
+Cargar datos de ejemplo (opcional):
+    npx prisma db seed
+
+PASO 4: INICIAR EN MODO DESARROLLO
+---------------------------------
+    npm run dev
+
+La aplicación estará disponible en: http://localhost:3000
+
+PASO 5: VERIFICAR FUNCIONAMIENTO
+-------------------------------
+- Abra el navegador en http://localhost:3000
+- Verá el Dashboard principal
+- Navegue por los diferentes módulos usando el menú lateral
+
+
+================================================================================
+3. GENERACIÓN DEL INSTALADOR (.EXE)
+================================================================================
+
+PASO 1: VERIFICAR QUE LA APP FUNCIONA
+------------------------------------
+    npm run dev
+
+Asegúrese de que todo funciona correctamente antes de compilar.
+
+PASO 2: COMPILAR PARA PRODUCCIÓN
+-------------------------------
+Para Windows (genera .exe instalador):
+    npm run electron:build:win
+
+Para macOS (genera .dmg):
+    npm run electron:build:mac
+
+Para Linux (genera .AppImage):
+    npm run electron:build:linux
+
+PASO 3: UBICACIÓN DEL INSTALADOR
+-------------------------------
+El instalador se genera en la carpeta "dist/":
+• Windows: dist/MTOPREV Setup 1.0.0.exe
+• macOS: dist/MTOPREV-1.0.0.dmg
+• Linux: dist/mtoprev-1.0.0.AppImage
+
+NOTA: La primera compilación puede tardar varios minutos ya que descarga
+las dependencias de Electron.
+
+
+================================================================================
+4. INSTALACIÓN EN EQUIPOS DE USUARIO
+================================================================================
+
+INSTALACIÓN ESTÁNDAR (Windows):
+-------------------------------
+1. Copie el archivo "MTOPREV Setup 1.0.0.exe" al equipo destino
+2. Haga doble clic en el archivo
+3. Si aparece "Windows protegió su PC":
+   - Haga clic en "Más información"
+   - Haga clic en "Ejecutar de todas formas"
+4. Siga el asistente de instalación:
+   - Seleccione el idioma (Español)
+   - Acepte los términos de licencia
+   - Seleccione la carpeta de instalación (por defecto: C:\Program Files\MTOPREV)
+   - Haga clic en "Instalar"
+5. Al finalizar, marque "Ejecutar MTOPREV" y haga clic en "Finalizar"
+
+INSTALACIÓN SILENCIOSA (para administradores):
+----------------------------------------------
+Ejecute desde línea de comandos:
+    MTOPREV-Setup-1.0.0.exe /S
+
+Instalación con parámetros personalizados:
+    MTOPREV-Setup-1.0.0.exe /S /D=D:\Programas\MTOPREV
+
+UBICACIÓN DE DATOS:
+------------------
+La base de datos se almacena en:
+• Windows: C:\Users\[Usuario]\AppData\Roaming\mtoprev\mtoprev.db
+• macOS: ~/Library/Application Support/mtoprev/mtoprev.db
+• Linux: ~/.config/mtoprev/mtoprev.db
+
+DESINSTALACIÓN:
+--------------
+1. Panel de Control → Programas → Desinstalar un programa
+2. Busque "MTOPREV" en la lista
+3. Haga clic derecho → Desinstalar
+4. Siga el asistente de desinstalación
+
+
+================================================================================
+5. CONFIGURACIÓN DE RED LOCAL
+================================================================================
+
+Para que múltiples equipos accedan a la misma base de datos:
+
+OPCIÓN A: BASE DE DATOS EN CARPETA COMPARTIDA
+---------------------------------------------
+1. Cree una carpeta compartida en el servidor (ej: \\SERVIDOR\MTOPREV)
+2. Dé permisos de lectura/escritura a los usuarios
+3. En cada equipo, modifique el archivo de configuración:
+   
+   Ubicación del archivo:
+   C:\Users\[Usuario]\AppData\Roaming\mtoprev\config.env
+   
+   Contenido:
+   DATABASE_URL=file:\\SERVIDOR\MTOPREV\mtoprev.db
+
+4. Copie la base de datos inicial a la carpeta compartida
+
+OPCIÓN B: ACCESO DIRECTO A BASE DE DATOS EXISTENTE
+-------------------------------------------------
+1. Instale MTOPREV en cada equipo
+2. Elimine la base de datos local
+3. Cree un acceso directo a la base de datos compartida
+
+NOTA IMPORTANTE: SQLite maneja bloqueos a nivel de archivo. Si hay muchos
+usuarios concurrentes, considere migrar a PostgreSQL o MySQL.
+
+
+================================================================================
+6. PRIMEROS PASOS
+================================================================================
+
+AL INICIAR POR PRIMERA VEZ:
+--------------------------
+1. La aplicación muestra el Dashboard principal
+2. Si cargó datos de ejemplo, verá:
+   - 3 centros de costo
+   - 3 áreas
+   - 6 materiales
+   - 3 personas
+   - 3 equipos
+   - 5 herramientas
+   - 3 solicitudes de ejemplo
+   - 3 mantenimientos programados
+
+CONFIGURACIÓN INICIAL RECOMENDADA:
+---------------------------------
+1. Vaya a "Centro de Costos" y configure sus centros reales
+2. Vaya a "Personal" y cargue su equipo de mantenimiento
+3. Vaya a "Mantenimientos" → pestaña "Equipos" y registre sus equipos
+4. Vaya a "Stock" y cargue su inventario de materiales
+5. Vaya a "Herramientas" y registre sus herramientas
+
+CREAR UNA SOLICITUD DE MANTENIMIENTO:
+-----------------------------------
+1. Vaya a "Solicitudes"
+2. Haga clic en "Nueva Solicitud"
+3. Complete los campos requeridos:
+   - Solicitante (nombre de quien reporta)
+   - Tipo de mantenimiento
+   - Descripción del problema
+   - Prioridad
+4. Haga clic en "Crear Solicitud"
+
+FLUJO DE TRABAJO DE SOLICITUDES:
+-------------------------------
+1. PENDIENTE → Solicitud creada, espera aprobación
+2. APROBADA → Supervisor aprobó la solicitud
+3. ESPERANDO INSUMOS → Se agregaron materiales requeridos
+4. INSUMOS RECIBIDOS → Llegaron todos los materiales
+5. EN EJECUCIÓN → El personal está trabajando
+6. CERRADA → Trabajo completado y documentado
+
+
+================================================================================
+7. RESOLUCIÓN DE PROBLEMAS
+================================================================================
+
+PROBLEMA: La aplicación no inicia
+---------------------------------
+Solución:
+1. Verifique que no hay otra instancia ejecutándose
+2. Elimine el archivo de bloqueo:
+   C:\Users\[Usuario]\AppData\Roaming\mtoprev\single-instance.lock
+3. Reinicie la aplicación
+
+PROBLEMA: Error de base de datos corrupta
+----------------------------------------
+Solución:
+1. Haga un backup del archivo actual
+2. Vaya a Archivo → Herramientas → Restaurar Backup
+3. Seleccione un backup anterior
+
+PROBLEMA: La aplicación está muy lenta
+-------------------------------------
+Solución:
+1. Verifique el tamaño del archivo de base de datos
+2. Si es mayor a 500MB, considere archivar datos antiguos
+3. Ejecute: Archivo → Mantenimiento → Compactar BD
+
+PROBLEMA: No puedo guardar cambios
+----------------------------------
+Solución:
+1. Verifique permisos de escritura en la carpeta de datos
+2. Si usa red, verifique conexión al servidor
+3. Verifique que no haya otro usuario con la BD bloqueada
+
+PROBLEMA: Error al imprimir/exportar
+-----------------------------------
+Solución:
+1. Verifique que tiene impresora configurada
+2. Para exportar, verifique permisos de escritura en la carpeta destino
+3. Use "Exportar CSV" como alternativa
+
+LOGS DE ERROR:
+-------------
+Los archivos de log se encuentran en:
+• Windows: C:\Users\[Usuario]\AppData\Roaming\mtoprev\logs\
+• macOS: ~/Library/Logs/mtoprev/
+• Linux: ~/.config/mtoprev/logs/
+
+
+================================================================================
+8. SOPORTE TÉCNICO
+================================================================================
+
+ANTES DE CONTACTAR SOPORTE:
+--------------------------
+1. Prepare la siguiente información:
+   - Versión de MTOPREV (menú Ayuda → Acerca de)
+   - Sistema operativo y versión
+   - Descripción detallada del problema
+   - Capturas de pantalla si es posible
+   - Archivos de log relevantes
+
+CONTACTO:
+--------
+• Email: soporte@mtoprev.com
+• Teléfono: +54 11 XXXX-XXXX
+• Horario: Lunes a Viernes 9:00 - 18:00
+
+ARCHIVOS IMPORTANTES:
+--------------------
+• Base de datos: %APPDATA%\mtoprev\mtoprev.db
+• Configuración: %APPDATA%\mtoprev\config.env
+• Logs: %APPDATA%\mtoprev\logs\
+
+BACKUP AUTOMÁTICO:
+-----------------
+MTOPREV realiza backups automáticos diarios en:
+%APPDATA%\mtoprev\backups\
+
+Se conservan los últimos 30 días de backups.
+
+
+================================================================================
+                         FIN DE LA GUÍA DE INSTALACIÓN
+================================================================================
+
+MTOPREV v1.0.0
+Sistema de Gestión de Mantenimiento Preventivo
+© 2024 - Todos los derechos reservados

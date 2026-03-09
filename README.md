@@ -1,141 +1,180 @@
-# 🚀 Welcome to Z.ai Code Scaffold
+# MTOPREV - Sistema de Gestión de Mantenimiento Preventivo
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+Sistema integral de gestión de mantenimiento para plantas industriales con control de stock, herramientas, personal, solicitudes de mantenimiento y centro de costos.
 
-## ✨ Technology Stack
+![MTOPREV Dashboard](docs/dashboard.png)
 
-This scaffold provides a robust foundation built with:
+## 🚀 Características Principales
 
-### 🎯 Core Framework
-- **⚡ Next.js 16** - The React framework for production with App Router
-- **📘 TypeScript 5** - Type-safe JavaScript for better developer experience
-- **🎨 Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+### Dashboard Principal
+- KPIs en tiempo real: solicitudes pendientes, stock bajo, mantenimientos vencidos
+- Gráficos de distribución de estados
+- Alertas visuales para elementos críticos
+- Últimas solicitudes y actividad reciente
 
-### 🧩 UI Components & Styling
-- **🧩 shadcn/ui** - High-quality, accessible components built on Radix UI
-- **🎯 Lucide React** - Beautiful & consistent icon library
-- **🌈 Framer Motion** - Production-ready motion library for React
-- **🎨 Next Themes** - Perfect dark mode in 2 lines of code
+### 📦 Stock de Materiales
+- Gestión completa de inventario
+- Alertas de stock bajo
+- Movimientos de entrada/salida
+- Asociación a centros de costo
 
-### 📋 Forms & Validation
-- **🎣 React Hook Form** - Performant forms with easy validation
-- **✅ Zod** - TypeScript-first schema validation
+### 🔧 Herramientas
+- Control de inventario de herramientas
+- Sistema de préstamos y devoluciones
+- Registro de calibraciones
+- Estados: Disponible, En Uso, Mantenimiento, Baja
 
-### 🔄 State Management & Data Fetching
-- **🐻 Zustand** - Simple, scalable state management
-- **🔄 TanStack Query** - Powerful data synchronization for React
-- **🌐 Fetch** - Promise-based HTTP request
+### 👥 Personal
+- Gestión del equipo de mantenimiento
+- Especialidades y turnos
+- Historial de trabajos asignados
 
-### 🗄️ Database & Backend
-- **🗄️ Prisma** - Next-generation TypeScript ORM
-- **🔐 NextAuth.js** - Complete open-source authentication solution
+### 📋 Solicitudes de Mantenimiento (Módulo Principal)
+- **Flujo completo de trabajo:**
+  1. PENDIENTE → Solicitud creada
+  2. APROBADA → Supervisor aprueba
+  3. ESPERANDO INSUMOS → Se solicitan materiales
+  4. INSUMOS RECIBIDOS → Llegan los materiales
+  5. EN EJECUCIÓN → Personal trabaja
+  6. CERRADA → Trabajo documentado
 
-### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
-- **🖱️ DND Kit** - Modern drag and drop toolkit for React
-- **📊 Recharts** - Redefined chart library built with React and D3
-- **🖼️ Sharp** - High performance image processing
+- **Seguimiento completo:**
+  - Quién solicita y cuándo
+  - Quién aprueba y cuándo
+  - Insumos requeridos y su llegada
+  - Tiempos de respuesta y ejecución
+  - Costos asociados
 
-### 🌍 Internationalization & Utilities
-- **🌍 Next Intl** - Internationalization library for Next.js
-- **📅 Date-fns** - Modern JavaScript date utility library
-- **🪝 ReactUse** - Collection of essential React hooks for modern development
+### 📅 Mantenimiento Preventivo
+- Registro de equipos
+- Cronograma de mantenimientos
+- Generación de OTs preventivas
+- Alertas de mantenimientos próximos/vencidos
 
-## 🎯 Why This Scaffold?
+### 💰 Centro de Costos
+- Definición de centros de costo
+- Presupuestos por área
+- Asociación de gastos
 
-- **🏎️ Fast Development** - Pre-configured tooling and best practices
-- **🎨 Beautiful UI** - Complete shadcn/ui component library with advanced interactions
-- **🔒 Type Safety** - Full TypeScript configuration with Zod validation
-- **📱 Responsive** - Mobile-first design principles with smooth animations
-- **🗄️ Database Ready** - Prisma ORM configured for rapid backend development
-- **🔐 Auth Included** - NextAuth.js for secure authentication flows
-- **📊 Data Visualization** - Charts, tables, and drag-and-drop functionality
-- **🌍 i18n Ready** - Multi-language support with Next Intl
-- **🚀 Production Ready** - Optimized build and deployment settings
-- **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
+### 📊 Reportes
+- Filtros por fecha, estado, área
+- Exportación a CSV
+- Estadísticas de tiempos y costos
 
-## 🚀 Quick Start
+## 💻 Tecnologías
+
+- **Frontend:** Next.js 15 + React 19 + TypeScript
+- **Base de datos:** SQLite con Prisma ORM
+- **UI:** Tailwind CSS + shadcn/ui
+- **Gráficos:** Recharts
+- **Desktop:** Electron (para versión instalable)
+
+## 📦 Instalación
+
+### Requisitos
+- Node.js 20+ o Bun
+- Windows 10+ / macOS / Linux
+
+### Modo Desarrollo
 
 ```bash
-# Install dependencies
-bun install
+# Clonar el proyecto
+git clone https://github.com/su-empresa/mtoprev.git
+cd mtoprev
 
-# Start development server
-bun run dev
+# Instalar dependencias
+npm install
 
-# Build for production
-bun run build
+# Configurar base de datos
+npx prisma generate
+npx prisma db push
 
-# Start production server
-bun start
+# Cargar datos de ejemplo (opcional)
+npx prisma db seed
+
+# Iniciar servidor
+npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your application running.
+La aplicación estará disponible en `http://localhost:3000`
 
-## 🤖 Powered by Z.ai
+### Generar Instalador (.exe)
 
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
+```bash
+# Para Windows
+npm run electron:build:win
 
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
+# Para macOS
+npm run electron:build:mac
 
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
-
-## 📁 Project Structure
-
-```
-src/
-├── app/                 # Next.js App Router pages
-├── components/          # Reusable React components
-│   └── ui/             # shadcn/ui components
-├── hooks/              # Custom React hooks
-└── lib/                # Utility functions and configurations
+# Para Linux
+npm run electron:build:linux
 ```
 
-## 🎨 Available Features & Components
+El instalador se generará en la carpeta `dist/`
 
-This scaffold includes a comprehensive set of modern web development tools:
+## 📁 Estructura del Proyecto
 
-### 🧩 UI Components (shadcn/ui)
-- **Layout**: Card, Separator, Aspect Ratio, Resizable Panels
-- **Forms**: Input, Textarea, Select, Checkbox, Radio Group, Switch
-- **Feedback**: Alert, Toast (Sonner), Progress, Skeleton
-- **Navigation**: Breadcrumb, Menubar, Navigation Menu, Pagination
-- **Overlay**: Dialog, Sheet, Popover, Tooltip, Hover Card
-- **Data Display**: Badge, Avatar, Calendar
+```
+mtoprev/
+├── src/
+│   ├── app/                    # Páginas de Next.js (App Router)
+│   │   ├── api/               # API Routes
+│   │   ├── stock/             # Módulo de stock
+│   │   ├── herramientas/      # Módulo de herramientas
+│   │   ├── personal/          # Módulo de personal
+│   │   ├── solicitudes/       # Módulo de solicitudes
+│   │   ├── mantenimientos/    # Módulo de mantenimiento
+│   │   ├── centros-costo/     # Módulo de centros de costo
+│   │   └── reportes/          # Módulo de reportes
+│   ├── components/
+│   │   ├── ui/                # Componentes de UI (shadcn)
+│   │   └── mtoprev/           # Componentes específicos
+│   ├── actions/               # Server Actions
+│   └── lib/                   # Utilidades
+├── prisma/
+│   ├── schema.prisma         # Esquema de base de datos
+│   └── seed.ts               # Datos de ejemplo
+├── electron/
+│   ├── main.js               # Proceso principal de Electron
+│   └── preload.js            # Bridge seguro
+└── download/
+    └── INSTALACION.txt       # Guía detallada de instalación
+```
 
-### 📊 Advanced Data Features
-- **Tables**: Powerful data tables with sorting, filtering, pagination (TanStack Table)
-- **Charts**: Beautiful visualizations with Recharts
-- **Forms**: Type-safe forms with React Hook Form + Zod validation
+## 🔒 Uso Offline
 
-### 🎨 Interactive Features
-- **Animations**: Smooth micro-interactions with Framer Motion
-- **Drag & Drop**: Modern drag-and-drop functionality with DND Kit
-- **Theme Switching**: Built-in dark/light mode support
+MTOPREV funciona 100% offline. La base de datos SQLite se almacena localmente:
 
-### 🔐 Backend Integration
-- **Authentication**: Ready-to-use auth flows with NextAuth.js
-- **Database**: Type-safe database operations with Prisma
-- **API Client**: HTTP requests with Fetch + TanStack Query
-- **State Management**: Simple and scalable with Zustand
+- **Windows:** `C:\Users\[Usuario]\AppData\Roaming\mtoprev\mtoprev.db`
+- **macOS:** `~/Library/Application Support/mtoprev/mtoprev.db`
+- **Linux:** `~/.config/mtoprev/mtoprev.db`
 
-### 🌍 Production Features
-- **Internationalization**: Multi-language support with Next Intl
-- **Image Optimization**: Automatic image processing with Sharp
-- **Type Safety**: End-to-end TypeScript with Zod validation
-- **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
+## 🌐 Configuración Multi-Equipo
 
-## 🤝 Get Started with Z.ai
+Para compartir la base de datos entre varios equipos:
 
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
+1. Coloque la base de datos en una carpeta de red
+2. Configure la variable `DATABASE_URL` en cada equipo:
+
+```env
+DATABASE_URL=file:\\SERVIDOR\MTOPREV\mtoprev.db
+```
+
+## 📖 Guía de Instalación
+
+Consulte el archivo [INSTALACION.txt](download/INSTALACION.txt) para instrucciones detalladas sobre:
+- Requisitos del sistema
+- Instalación para desarrollo
+- Generación del instalador
+- Instalación en equipos de usuario
+- Configuración de red local
+- Resolución de problemas
+
+## 📄 Licencia
+
+Este proyecto es propiedad de su organización. Todos los derechos reservados.
 
 ---
 
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+Desarrollado con ❤️ para la gestión eficiente del mantenimiento industrial.

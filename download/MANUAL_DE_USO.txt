@@ -1,0 +1,550 @@
+================================================================================
+                    MTOPREV - MANUAL DE USO COMPLETO
+                 Sistema de Gestión de Mantenimiento Preventivo
+                              Versión 1.0.0
+================================================================================
+
+Este manual explica cómo usar cada parte del programa MTOPREV.
+Está escrito en lenguaje simple para que cualquiera pueda entenderlo.
+
+
+================================================================================
+CAPÍTULO 1: CONOCIENDO EL PROGRAMA
+================================================================================
+
+1.1 ¿QUÉ ES MTOPREV?
+--------------------
+MTOPREV es un programa para gestionar el mantenimiento de una planta industrial.
+Sirve para:
+
+✓ Controlar el stock de materiales (repuestos, herramientas, insumos)
+✓ Gestionar solicitudes de mantenimiento
+✓ Planificar mantenimientos preventivos
+✓ Controlar costos por área
+✓ Ver reportes y estadísticas
+
+
+1.2 LA PANTALLA PRINCIPAL (DASHBOARD)
+-------------------------------------
+Cuando abre MTOPREV, verá la pantalla principal llamada "Dashboard".
+
+¿Qué ve en esta pantalla?
+
+┌─────────────────────────────────────────────────────────────┐
+│  MTOPREV                                    [Dashboard]    │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│  │Solicitudes│ │Stock Bajo│ │ Mantenim.│ │Completadas│      │
+│  │Pendientes │ │          │ │ Vencidos │ │           │      │
+│  │    5      │ │    3     │ │    2     │ │    12     │      │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
+│                                                             │
+│  ┌─────────────────────┐ ┌─────────────────────┐          │
+│  │  ESTADOS DE         │ │     ALERTAS         │          │
+│  │  SOLICITUDES        │ │                     │          │
+│  │  [gráfico de barras]│ │  ⚠ Mantenim. vencido│          │
+│  │                     │ │  ⚠ Stock bajo       │          │
+│  └─────────────────────┘ └─────────────────────┘          │
+│                                                             │
+│  ┌─────────────────────────────────────────────┐          │
+│  │  ÚLTIMAS SOLICITUDES                        │          │
+│  │  SOL-000001 | Juan Pérez | Pendiente        │          │
+│  │  SOL-000002 | María Gómez | Aprobada        │          │
+│  └─────────────────────────────────────────────┘          │
+└─────────────────────────────────────────────────────────────┘
+
+Los COLORES tienen significado:
+
+🟡 AMARILLO = Pendiente (esperando atención)
+🟢 VERDE = Completado / OK
+🔴 ROJO = Urgente / Problema / Vencido
+🔵 AZUL = En proceso
+
+
+1.3 EL MENÚ LATERAL (CÓMO NAVEGAR)
+----------------------------------
+A la izquierda de la pantalla verá un menú oscuro con varias opciones:
+
+┌────────────────────┐
+│ 🏭 MTOPREV         │
+├────────────────────┤
+│ 📊 Dashboard       │  ← Pantalla principal
+│ 📦 Stock           │  ← Materiales y repuestos
+│ 🔧 Herramientas    │  ← Control de herramientas
+│ 👥 Personal        │  ← Equipo de trabajo
+│ 📋 Solicitudes     │  ← Pedidos de mantenimiento
+│ 📅 Mantenimientos  │  ← Cronograma preventivo
+│ 💰 Centro Costos   │  ← Control de gastos
+│ 📈 Reportes        │  ← Estadísticas
+└────────────────────┘
+
+PARA IR A CUALQUIER PARTE:
+- Haga un solo clic sobre la opción deseada
+- La pantalla cambiará a esa sección
+
+
+================================================================================
+CAPÍTULO 2: STOCK DE MATERIALES
+================================================================================
+
+2.1 ¿PARA QUÉ SIRVE?
+--------------------
+Aquí se guardan todos los materiales, repuestos e insumos que tiene 
+la empresa. El programa le avisa cuando el stock está bajo.
+
+
+2.2 CÓMO VER LOS MATERIALES
+---------------------------
+1. Haga clic en "Stock" en el menú izquierdo
+2. Verá una tabla con todos los materiales:
+
+   ┌─────────────────────────────────────────────────────────────┐
+   │ Código  │  Nombre         │ Stock │ Mínimo │ Estado       │
+   ├─────────────────────────────────────────────────────────────┤
+   │ MAT-001 │ Cable eléctrico │  500  │  100   │ ✅ OK        │
+   │ MAT-002 │ Fusibles 10A    │   15  │   20   │ ⚠️ BAJO      │
+   │ MAT-003 │ Rodamiento      │   10  │   15   │ ⚠️ BAJO      │
+   └─────────────────────────────────────────────────────────────┘
+
+El ESTADO le dice si necesita comprar más:
+- ✅ OK = Tiene suficiente
+- ⚠️ BAJO = Necesita reponer
+
+
+2.3 CÓMO AGREGAR UN NUEVO MATERIAL
+----------------------------------
+1. Haga clic en el botón "Nuevo Material" (arriba a la derecha)
+2. Se abrirá una ventana con casillas para completar:
+
+   ┌─────────────────────────────────────┐
+   │ NUEVO MATERIAL                      │
+   ├─────────────────────────────────────┤
+   │ Código:        [MAT-004          ] │
+   │ Nombre:        [Tornillos 1/4    ] │
+   │ Descripción:   [Tornillos...     ] │
+   │ Categoría:     [Consumibles    ▼ ] │
+   │ Stock Actual:  [100              ] │
+   │ Stock Mínimo:  [50               ] │
+   │ Unidad:        [unidades         ] │
+   │ Precio:        [150              ] │
+   │ Ubicación:     [Depósito A       ] │
+   │                                     │
+   │        [Cancelar]  [Guardar]       │
+   └─────────────────────────────────────┘
+
+3. Complete TODOS los campos que tienen asterisco (*)
+4. Haga clic en "Guardar"
+
+
+2.4 CÓMO EDITAR UN MATERIAL
+---------------------------
+1. Busque el material en la tabla
+2. Haga clic en el icono de LÁPIZ ✏️ a la derecha
+3. Modifique lo que necesite
+4. Haga clic en "Guardar"
+
+
+2.5 CÓMO REGISTRAR ENTRADA DE MATERIAL
+--------------------------------------
+Cuando compra materiales y llegan al depósito:
+
+1. Busque el material en la tabla
+2. Haga clic en el icono de FLECHAS ↕️
+3. Aparecerá una ventana:
+
+   ┌─────────────────────────────────────┐
+   │ REGISTRAR MOVIMIENTO                │
+   ├─────────────────────────────────────┤
+   │ Material: Cable eléctrico           │
+   │ Stock actual: 500 metros            │
+   │                                     │
+   │ Tipo: [ENTRADA ▼]                   │
+   │ Cantidad: [100                    ] │
+   │ Motivo: [Compra proveedor X      ] │
+   │ Referencia: [Factura 1234        ] │
+   │                                     │
+   │        [Cancelar]  [Registrar]      │
+   └─────────────────────────────────────┘
+
+4. Seleccione "ENTRADA"
+5. Escriba la cantidad que llegó
+6. Escriba el motivo (ej: "Compra")
+7. Haga clic en "Registrar"
+
+
+2.6 CÓMO REGISTRAR SALIDA DE MATERIAL
+-------------------------------------
+Cuando se usa material para un trabajo:
+
+1. Busque el material
+2. Haga clic en el icono de FLECHAS ↕️
+3. Seleccione "SALIDA"
+4. Escriba la cantidad que se usó
+5. En "Referencia" ponga el número de solicitud
+6. Haga clic en "Registrar"
+
+
+================================================================================
+CAPÍTULO 3: HERRAMIENTAS
+================================================================================
+
+3.1 ¿PARA QUÉ SIRVE?
+--------------------
+Controla dónde están las herramientas, quién las tiene prestadas y
+cuándo necesitan calibración.
+
+
+3.2 ESTADOS DE HERRAMIENTAS
+---------------------------
+Cada herramienta puede estar en uno de estos estados:
+
+✅ DISPONIBLE = Está guardada, lista para usar
+🔵 EN USO = Alguien la tiene prestada
+🟡 MANTENIMIENTO = Está siendo reparada
+⚫ BAJA = No se usa más
+
+
+3.3 CÓMO PRESTAR UNA HERRAMIENTA
+--------------------------------
+1. Haga clic en "Herramientas" en el menú
+2. Busque la herramienta que está DISPONIBLE
+3. Haga clic en el icono de PERSONA 👤
+4. Seleccione quién se lleva la herramienta
+5. Escriba una observación si es necesario
+6. Haga clic en "Prestar"
+
+
+3.4 CÓMO DEVOLVER UNA HERRAMIENTA
+---------------------------------
+1. Busque la herramienta que dice "EN USO"
+2. Haga clic en el icono de PERSONA 👤 (ahora verde)
+3. La herramienta vuelve a estar "DISPONIBLE"
+
+
+3.5 CÓMO AGREGAR UNA NUEVA HERRAMIENTA
+--------------------------------------
+1. Haga clic en "Nueva Herramienta"
+2. Complete los datos:
+
+   - Código: número único (ej: HER-001)
+   - Nombre: (ej: Taladro percutor)
+   - Tipo: Manual, Eléctrica, Medición, Especial
+   - Ubicación: dónde se guarda
+
+3. Haga clic en "Guardar"
+
+
+================================================================================
+CAPÍTULO 4: SOLICITUDES DE MANTENIMIENTO (IMPORTANTE)
+================================================================================
+
+Este es el módulo más importante del sistema. Aquí se gestionan
+todos los pedidos de trabajo de mantenimiento.
+
+
+4.1 ESTADOS DE UNA SOLICITUD
+----------------------------
+Una solicitud pasa por varios estados:
+
+   ┌─────────────┐
+   │  PENDIENTE  │ ← Acaba de crearse
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │  APROBADA   │ ← Supervisor aprobó
+   └──────┬──────┘
+          ↓
+   ┌──────────────────┐
+   │ ESPERANDO INSUMOS│ ← Se pidieron materiales
+   └──────┬───────────┘
+          ↓
+   ┌──────────────────┐
+   │ INSUMOS RECIBIDOS│ ← Llegaron los materiales
+   └──────┬───────────┘
+          ↓
+   ┌─────────────┐
+   │EN EJECUCIÓN │ ← Se está trabajando
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │   CERRADA   │ ← Trabajo terminado
+   └─────────────┘
+
+
+4.2 CÓMO CREAR UNA SOLICITUD NUEVA
+----------------------------------
+1. Haga clic en "Solicitudes" en el menú
+2. Haga clic en "Nueva Solicitud" (botón azul arriba a la derecha)
+3. Complete el formulario:
+
+   ┌─────────────────────────────────────────┐
+   │ NUEVA SOLICITUD                         │
+   ├─────────────────────────────────────────┤
+   │ Solicitante: [Juan Pérez            ]  │
+   │ Área:        [Producción          ▼ ]  │
+   │ Equipo:      [Compresor Principal  ▼]  │
+   │ Tipo:        [Correctivo          ▼]   │
+   │ Prioridad:   [ALTA                ▼]   │
+   │                                         │
+   │ Descripción del problema:               │
+   │ [El compresor hace ruidos extraños   ]  │
+   │ [y vibra más de lo normal             ]  │
+   │                                         │
+   │ Observaciones:                          │
+   │ [Urgente, detiene producción         ]  │
+   │                                         │
+   │      [Cancelar]        [Crear]          │
+   └─────────────────────────────────────────┘
+
+CAMPOS IMPORTANTES:
+
+- SOLICITANTE: Nombre de quien hace el pedido
+- ÁREA: Dónde está el problema
+- EQUIPO: Qué máquina o equipo falla (si aplica)
+- TIPO: 
+   • PREVENTIVO = Mantenimiento programado
+   • CORRECTIVO = Algo se rompió
+   • EMERGENCIA = Urgente, detiene producción
+- PRIORIDAD:
+   • ALTA = Urgente
+   • MEDIA = Importante pero no urgente
+   • BAJA = Puede esperar
+
+4. Haga clic en "Crear"
+
+
+4.3 CÓMO APROBAR UNA SOLICITUD
+------------------------------
+(Solo para supervisores)
+
+1. Vea las solicitudes en estado "PENDIENTE"
+2. Haga clic en el icono de FLECHA ➡️ a la derecha
+3. Seleccione el nuevo estado "APROBADA"
+4. Agregue un comentario si desea
+5. Haga clic en "Confirmar"
+
+
+4.4 CÓMO AGREGAR INSUMOS A UNA SOLICITUD
+----------------------------------------
+Cuando la solicitud está aprobada, se deben agregar los materiales
+necesarios:
+
+1. Busque la solicitud APROBADA
+2. Haga clic en el icono de CAJA 📦
+3. Se abrirá una ventana:
+
+   ┌─────────────────────────────────────────┐
+   │ AGREGAR INSUMOS                         │
+   ├─────────────────────────────────────────┤
+   │ Material: [Rodamiento 6205        ▼ ]  │
+   │ Cantidad:  [2                     ]     │
+   │                                         │
+   │ [Agregar]                               │
+   │                                         │
+   │ INSUMOS AGREGADOS:                      │
+   │ • Rodamiento 6205 - 2 unidades         │
+   │   Estado: PENDIENTE                    │
+   │                                         │
+   │ • Grasa lubricante - 1 kg              │
+   │   Estado: PENDIENTE                    │
+   └─────────────────────────────────────────┘
+
+4. Seleccione el material del menú desplegable
+5. Escriba la cantidad
+6. Haga clic en "Agregar"
+7. Repita para cada material necesario
+8. Cuando termine, cierre la ventana
+
+
+4.5 CÓMO REGISTRAR QUE LLEGARON LOS INSUMOS
+-------------------------------------------
+Cuando los materiales llegan:
+
+1. Vuelva a abrir la ventana de insumos (icono de CAJA 📦)
+2. Para cada material que llegó, haga clic en "LLEGÓ"
+3. El estado cambiará de "Pendiente" a "Recibido"
+4. Cuando TODOS los insumos llegan, la solicitud pasa
+   automáticamente a "INSUMOS RECIBIDOS"
+
+
+4.6 CÓMO INICIAR EL TRABAJO
+---------------------------
+Cuando todo está listo:
+
+1. Haga clic en el icono de FLECHA ➡️
+2. Seleccione "EN EJECUCIÓN"
+3. Asigne la persona que hará el trabajo
+4. Haga clic en "Confirmar"
+
+
+4.7 CÓMO CERRAR UNA SOLICITUD
+-----------------------------
+Cuando el trabajo termina:
+
+1. Haga clic en el icono de FLECHA ➡️
+2. Seleccione "CERRADA"
+3. Complete los datos finales:
+
+   ┌─────────────────────────────────────────┐
+   │ COMPLETAR TRABAJO                       │
+   ├─────────────────────────────────────────┤
+   │ Trabajo realizado:                      │
+   │ [Se cambió el rodamiento y se        ] │
+   │ [lubricaron los rotores              ] │
+   │                                         │
+   │ Observaciones:                          │
+   │ [Próximo mantenimiento en 30 días    ] │
+   │                                         │
+   │ Costo materiales: [$15,000         ]   │
+   │ Costo mano obra:  [$5,000          ]   │
+   │                                         │
+   │      [Cancelar]        [Confirmar]      │
+   └─────────────────────────────────────────┘
+
+4. Describa QUÉ SE HIZO
+5. Si sabe los costos, ingréselos
+6. Haga clic en "Confirmar"
+
+
+================================================================================
+CAPÍTULO 5: MANTENIMIENTO PREVENTIVO
+================================================================================
+
+5.1 ¿QUÉ ES?
+------------
+Es el mantenimiento que se hace ANTES de que algo se rompa.
+Se programa con anticipación para evitar fallas.
+
+
+5.2 CÓMO VER EL CRONGRAMA
+-------------------------
+1. Haga clic en "Mantenimientos"
+2. Haga clic en la pestaña "Cronograma"
+
+Verá:
+
+┌────────────────────────────────────────────────────────────┐
+│ OT       │ EQUIPO           │ FECHA      │ ESTADO        │
+├────────────────────────────────────────────────────────────┤
+│ OT-001   │ Compresor        │ 15/01/2025 │ Programado    │
+│ OT-002   │ Puente Grúa      │ 20/01/2025 │ Programado    │
+│ OT-003   │ Centro CNC       │ 10/01/2025 │ 🔴 VENCIDO    │
+└────────────────────────────────────────────────────────────┘
+
+Si ve 🔴 VENCIDO, significa que pasó la fecha y no se hizo.
+
+
+5.3 CÓMO AGREGAR UN EQUIPO
+--------------------------
+1. Vaya a la pestaña "Equipos"
+2. Haga clic en "Nuevo Equipo"
+3. Complete:
+
+   - Código: número único
+   - Nombre: nombre del equipo
+   - Frecuencia de mantenimiento: cada cuántos días (ej: 30)
+   - Centro de costo: a qué área pertenece
+
+4. Haga clic en "Guardar"
+
+
+5.4 CÓMO PROGRAMAR UN MANTENIMIENTO
+-----------------------------------
+1. Vaya a "Cronograma"
+2. Haga clic en "Programar Mantenimiento"
+3. Seleccione el equipo
+4. Elija la fecha
+5. Haga clic en "Programar"
+
+
+5.5 CÓMO COMPLETAR UN MANTENIMIENTO
+-----------------------------------
+1. Busque el mantenimiento en la lista
+2. Haga clic en el icono de CHECK ✅
+3. Complete qué se hizo
+4. Haga clic en "Completar"
+
+
+================================================================================
+CAPÍTULO 6: PERSONAL
+================================================================================
+
+6.1 CÓMO AGREGAR UN TÉCNICO
+---------------------------
+1. Haga clic en "Personal" en el menú
+2. Haga clic en "Nuevo Personal"
+3. Complete los datos:
+
+   - Legajo: número de empleado
+   - Nombre y Apellido
+   - Especialidad: Mecánico, Electricista, etc.
+   - Turno: Mañana, Tarde, Noche
+   - Teléfono y Email
+
+4. Haga clic en "Guardar"
+
+
+================================================================================
+CAPÍTULO 7: CENTROS DE COSTO
+================================================================================
+
+7.1 ¿QUÉ ES?
+------------
+Es una forma de agrupar los gastos. Por ejemplo:
+- Centro "Producción" → gastos de producción
+- Centro "Mantenimiento" → gastos del taller
+
+
+7.2 CÓMO CREAR UN CENTRO DE COSTO
+---------------------------------
+1. Haga clic en "Centro de Costos"
+2. Haga clic en "Nuevo Centro"
+3. Complete:
+
+   - Código: (ej: CC-001)
+   - Nombre: (ej: Producción)
+   - Presupuesto: monto asignado
+
+4. Haga clic en "Guardar"
+
+
+================================================================================
+CAPÍTULO 8: REPORTES
+================================================================================
+
+8.1 ¿PARA QUÉ SIRVE?
+--------------------
+Para ver estadísticas y exportar información.
+
+
+8.2 CÓMO GENERAR UN REPORTE
+---------------------------
+1. Haga clic en "Reportes"
+2. Use los filtros para seleccionar:
+   - Rango de fechas
+   - Estado de las solicitudes
+   - Área
+   - Centro de costo
+
+3. Verá los resultados en pantalla
+4. Para descargar, haga clic en "Exportar CSV"
+   (esto crea un archivo que puede abrir en Excel)
+
+
+================================================================================
+CONSEJOS IMPORTANTES
+================================================================================
+
+✓ Siempre COMPLETE TODOS LOS DATOS en cada formulario
+✓ Haga RESPALDOS cada semana
+✓ Cuando termine de usar el programa, CIÉRRELO correctamente
+✓ Si algo no funciona, ANOTE EL ERROR exacto
+✓ MANTENGA ACTUALIZADOS los datos de stock
+
+================================================================================
+                         FIN DEL MANUAL DE USO
+================================================================================
+
+MTOPREV v1.0.0
+Sistema de Gestión de Mantenimiento Preventivo

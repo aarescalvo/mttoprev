@@ -1,323 +1,250 @@
 ================================================================================
-                    MTOPREV - GUÍA DE INSTALACIÓN DETALLADA
+                    MTOPREV - GUÍA DE INSTALACIÓN PARA USUARIOS
                  Sistema de Gestión de Mantenimiento Preventivo
                               Versión 1.0.0
 ================================================================================
 
-ÍNDICE
-------
-1. REQUISITOS DEL SISTEMA
-2. INSTALACIÓN PARA DESARROLLO
-3. GENERACIÓN DEL INSTALADOR (.EXE)
-4. INSTALACIÓN EN EQUIPOS DE USUARIO
-5. CONFIGURACIÓN DE RED LOCAL
-6. PRIMEROS PASOS
-7. RESOLUCIÓN DE PROBLEMAS
-8. SOPORTE TÉCNICO
+Esta guía está pensada para personas que nunca han instalado un programa antes.
+Siga cada paso con calma y en orden.
 
 
 ================================================================================
-1. REQUISITOS DEL SISTEMA
+PARTE 1: ANTES DE COMENZAR - VERIFIQUE SU COMPUTADORA
 ================================================================================
 
-REQUISITOS MÍNIMOS:
+¿Qué sistema operativo tiene?
+------------------------------
+Para saber qué versión de Windows tiene:
+
+1. Haga clic en el botón de INICIO (esquina inferior izquierda)
+2. Escriba "acerca de" y presione ENTER
+3. Aparecerá una ventana con la información de su PC
+4. Busque donde dice "Especificaciones de dispositivo" o "Windows"
+5. Debe decir "Windows 10" o "Windows 11"
+
+IMPORTANTE: MTOPREV funciona SOLO en Windows 10 o Windows 11.
+Si tiene Windows 7, Windows 8 o Windows XP, el programa NO funcionará.
+
+
+Requisitos mínimos:
 -------------------
-• Sistema Operativo: Windows 10 (64-bit) o superior
-• Procesador: Intel Core i3 o equivalente
-• Memoria RAM: 4 GB
-• Espacio en disco: 500 MB
-• Resolución de pantalla: 1366 x 768
-
-REQUISITOS RECOMENDADOS:
------------------------
-• Sistema Operativo: Windows 11 (64-bit)
-• Procesador: Intel Core i5 o superior
-• Memoria RAM: 8 GB
-• Espacio en disco: 1 GB
-• Resolución de pantalla: 1920 x 1080
-
-PARA DESARROLLO/COMPILACIÓN:
----------------------------
-• Node.js v20.x o superior (https://nodejs.org)
-• npm v10.x o bun v1.x
-• Git (https://git-scm.com)
-• Visual Studio Code (recomendado)
+✓ Windows 10 o Windows 11 (versión de 64 bits)
+✓ Al menos 4 GB de memoria RAM
+✓ 1 GB de espacio libre en el disco duro
+✓ Conexión a internet (solo para la instalación inicial)
 
 
 ================================================================================
-2. INSTALACIÓN PARA DESARROLLO
+PARTE 2: CÓMO DESCARGAR EL INSTALADOR
 ================================================================================
 
-PASO 1: CLONAR O DESCARGAR EL PROYECTO
+PASO 1: Abrir el navegador de internet
 --------------------------------------
-Si tiene acceso al repositorio Git:
-    git clone https://github.com/su-empresa/mtoprev.git
-    cd mtoprev
-
-O descargue el archivo ZIP del proyecto y extraígalo en una carpeta local.
-
-PASO 2: INSTALAR DEPENDENCIAS
------------------------------
-Abra una terminal (PowerShell o CMD) en la carpeta del proyecto:
-
-Con npm:
-    npm install
-
-O con bun (más rápido):
-    bun install
-
-PASO 3: CONFIGURAR BASE DE DATOS
--------------------------------
-El proyecto utiliza SQLite, que no requiere instalación adicional.
-
-Crear la base de datos:
-    npx prisma generate
-    npx prisma db push
-
-Cargar datos de ejemplo (opcional):
-    npx prisma db seed
-
-PASO 4: INICIAR EN MODO DESARROLLO
----------------------------------
-    npm run dev
-
-La aplicación estará disponible en: http://localhost:3000
-
-PASO 5: VERIFICAR FUNCIONAMIENTO
--------------------------------
-- Abra el navegador en http://localhost:3000
-- Verá el Dashboard principal
-- Navegue por los diferentes módulos usando el menú lateral
+- Haga doble clic en el icono de su navegador 
+  (puede ser Chrome, Edge, Firefox, etc.)
 
 
-================================================================================
-3. GENERACIÓN DEL INSTALADOR (.EXE)
-================================================================================
-
-PASO 1: VERIFICAR QUE LA APP FUNCIONA
-------------------------------------
-    npm run dev
-
-Asegúrese de que todo funciona correctamente antes de compilar.
-
-PASO 2: COMPILAR PARA PRODUCCIÓN
--------------------------------
-Para Windows (genera .exe instalador):
-    npm run electron:build:win
-
-Para macOS (genera .dmg):
-    npm run electron:build:mac
-
-Para Linux (genera .AppImage):
-    npm run electron:build:linux
-
-PASO 3: UBICACIÓN DEL INSTALADOR
--------------------------------
-El instalador se genera en la carpeta "dist/":
-• Windows: dist/MTOPREV Setup 1.0.0.exe
-• macOS: dist/MTOPREV-1.0.0.dmg
-• Linux: dist/mtoprev-1.0.0.AppImage
-
-NOTA: La primera compilación puede tardar varios minutos ya que descarga
-las dependencias de Electron.
-
-
-================================================================================
-4. INSTALACIÓN EN EQUIPOS DE USUARIO
-================================================================================
-
-INSTALACIÓN ESTÁNDAR (Windows):
--------------------------------
-1. Copie el archivo "MTOPREV Setup 1.0.0.exe" al equipo destino
-2. Haga doble clic en el archivo
-3. Si aparece "Windows protegió su PC":
-   - Haga clic en "Más información"
-   - Haga clic en "Ejecutar de todas formas"
-4. Siga el asistente de instalación:
-   - Seleccione el idioma (Español)
-   - Acepte los términos de licencia
-   - Seleccione la carpeta de instalación (por defecto: C:\Program Files\MTOPREV)
-   - Haga clic en "Instalar"
-5. Al finalizar, marque "Ejecutar MTOPREV" y haga clic en "Finalizar"
-
-INSTALACIÓN SILENCIOSA (para administradores):
-----------------------------------------------
-Ejecute desde línea de comandos:
-    MTOPREV-Setup-1.0.0.exe /S
-
-Instalación con parámetros personalizados:
-    MTOPREV-Setup-1.0.0.exe /S /D=D:\Programas\MTOPREV
-
-UBICACIÓN DE DATOS:
-------------------
-La base de datos se almacena en:
-• Windows: C:\Users\[Usuario]\AppData\Roaming\mtoprev\mtoprev.db
-• macOS: ~/Library/Application Support/mtoprev/mtoprev.db
-• Linux: ~/.config/mtoprev/mtoprev.db
-
-DESINSTALACIÓN:
---------------
-1. Panel de Control → Programas → Desinstalar un programa
-2. Busque "MTOPREV" en la lista
-3. Haga clic derecho → Desinstalar
-4. Siga el asistente de desinstalación
-
-
-================================================================================
-5. CONFIGURACIÓN DE RED LOCAL
-================================================================================
-
-Para que múltiples equipos accedan a la misma base de datos:
-
-OPCIÓN A: BASE DE DATOS EN CARPETA COMPARTIDA
----------------------------------------------
-1. Cree una carpeta compartida en el servidor (ej: \\SERVIDOR\MTOPREV)
-2. Dé permisos de lectura/escritura a los usuarios
-3. En cada equipo, modifique el archivo de configuración:
-   
-   Ubicación del archivo:
-   C:\Users\[Usuario]\AppData\Roaming\mtoprev\config.env
-   
-   Contenido:
-   DATABASE_URL=file:\\SERVIDOR\MTOPREV\mtoprev.db
-
-4. Copie la base de datos inicial a la carpeta compartida
-
-OPCIÓN B: ACCESO DIRECTO A BASE DE DATOS EXISTENTE
--------------------------------------------------
-1. Instale MTOPREV en cada equipo
-2. Elimine la base de datos local
-3. Cree un acceso directo a la base de datos compartida
-
-NOTA IMPORTANTE: SQLite maneja bloqueos a nivel de archivo. Si hay muchos
-usuarios concurrentes, considere migrar a PostgreSQL o MySQL.
-
-
-================================================================================
-6. PRIMEROS PASOS
-================================================================================
-
-AL INICIAR POR PRIMERA VEZ:
---------------------------
-1. La aplicación muestra el Dashboard principal
-2. Si cargó datos de ejemplo, verá:
-   - 3 centros de costo
-   - 3 áreas
-   - 6 materiales
-   - 3 personas
-   - 3 equipos
-   - 5 herramientas
-   - 3 solicitudes de ejemplo
-   - 3 mantenimientos programados
-
-CONFIGURACIÓN INICIAL RECOMENDADA:
----------------------------------
-1. Vaya a "Centro de Costos" y configure sus centros reales
-2. Vaya a "Personal" y cargue su equipo de mantenimiento
-3. Vaya a "Mantenimientos" → pestaña "Equipos" y registre sus equipos
-4. Vaya a "Stock" y cargue su inventario de materiales
-5. Vaya a "Herramientas" y registre sus herramientas
-
-CREAR UNA SOLICITUD DE MANTENIMIENTO:
------------------------------------
-1. Vaya a "Solicitudes"
-2. Haga clic en "Nueva Solicitud"
-3. Complete los campos requeridos:
-   - Solicitante (nombre de quien reporta)
-   - Tipo de mantenimiento
-   - Descripción del problema
-   - Prioridad
-4. Haga clic en "Crear Solicitud"
-
-FLUJO DE TRABAJO DE SOLICITUDES:
--------------------------------
-1. PENDIENTE → Solicitud creada, espera aprobación
-2. APROBADA → Supervisor aprobó la solicitud
-3. ESPERANDO INSUMOS → Se agregaron materiales requeridos
-4. INSUMOS RECIBIDOS → Llegaron todos los materiales
-5. EN EJECUCIÓN → El personal está trabajando
-6. CERRADA → Trabajo completado y documentado
-
-
-================================================================================
-7. RESOLUCIÓN DE PROBLEMAS
-================================================================================
-
-PROBLEMA: La aplicación no inicia
----------------------------------
-Solución:
-1. Verifique que no hay otra instancia ejecutándose
-2. Elimine el archivo de bloqueo:
-   C:\Users\[Usuario]\AppData\Roaming\mtoprev\single-instance.lock
-3. Reinicie la aplicación
-
-PROBLEMA: Error de base de datos corrupta
-----------------------------------------
-Solución:
-1. Haga un backup del archivo actual
-2. Vaya a Archivo → Herramientas → Restaurar Backup
-3. Seleccione un backup anterior
-
-PROBLEMA: La aplicación está muy lenta
--------------------------------------
-Solución:
-1. Verifique el tamaño del archivo de base de datos
-2. Si es mayor a 500MB, considere archivar datos antiguos
-3. Ejecute: Archivo → Mantenimiento → Compactar BD
-
-PROBLEMA: No puedo guardar cambios
+PASO 2: Ir a la página de descarga
 ----------------------------------
-Solución:
-1. Verifique permisos de escritura en la carpeta de datos
-2. Si usa red, verifique conexión al servidor
-3. Verifique que no haya otro usuario con la BD bloqueada
+- Haga clic en la barra de direcciones (donde dice www.algo.com)
+- Escriba: github.com/aarescalvo/mttoprev
+- Presione la tecla ENTER
 
-PROBLEMA: Error al imprimir/exportar
------------------------------------
-Solución:
-1. Verifique que tiene impresora configurada
-2. Para exportar, verifique permisos de escritura en la carpeta destino
-3. Use "Exportar CSV" como alternativa
 
-LOGS DE ERROR:
--------------
-Los archivos de log se encuentran en:
-• Windows: C:\Users\[Usuario]\AppData\Roaming\mtoprev\logs\
-• macOS: ~/Library/Logs/mtoprev/
-• Linux: ~/.config/mtoprev/logs/
+PASO 3: Descargar el archivo
+----------------------------
+- En la página, busque donde dice "Releases" o "Versiones"
+  (generalmente está a la derecha de la pantalla)
+- Haga clic donde dice "Releases"
+- Verá un archivo llamado "MTOPREV-Setup-1.0.0.exe"
+- Haga clic en ese archivo para descargarlo
+- Espere a que termine la descarga (puede tardar unos minutos)
+
+
+¿Dónde se guardó el archivo?
+----------------------------
+Por defecto, Windows guarda las descargas en:
+
+   C:\Users\[SU USUARIO]\Downloads
+
+O también puede:
+- Presionar las teclas CTRL + J (mantenga presionada la tecla CTRL 
+  y luego presione J) para ver las descargas
+- Hacer clic en la carpeta junto al archivo descargado
 
 
 ================================================================================
-8. SOPORTE TÉCNICO
+PARTE 3: INSTALACIÓN DEL PROGRAMA
 ================================================================================
 
-ANTES DE CONTACTAR SOPORTE:
+PASO 1: Ejecutar el instalador
+------------------------------
+1. Vaya a la carpeta donde descargó el archivo
+2. Haga doble clic en "MTOPREV-Setup-1.0.0.exe"
+
+
+PASO 2: Si aparece un mensaje de seguridad
+------------------------------------------
+Si Windows muestra un mensaje que dice:
+"Windows protegió su PC" o "El equipo está protegido por Windows":
+
+NO SE ASUSTE - Esto es normal. Windows no reconoce el programa porque es nuevo.
+
+Para continuar:
+1. Haga clic en "Más información" (texto azul debajo del mensaje)
+2. Aparecerá un botón que dice "Ejecutar de todas formas"
+3. Haga clic en ese botón
+
+
+PASO 3: Seguir el asistente de instalación
+------------------------------------------
+El asistente le hará varias preguntas. Aquí le explicamos qué responder:
+
+VENTANA 1: Bienvenida
+- Haga clic en "Siguiente"
+
+VENTANA 2: Carpeta de instalación
+- Se recomienda NO cambiar la carpeta
+- Haga clic en "Siguiente"
+
+VENTANA 3: Confirmación
+- Haga clic en "Instalar"
+- Si le pregunta "¿Desea permitir que esta aplicación haga cambios?", 
+  haga clic en "Sí"
+
+VENTANA 4: Instalación
+- Espere a que la barra verde llegue al final
+- Esto puede tardar 1-2 minutos
+
+VENTANA 5: Finalización
+- Deje marcado "Ejecutar MTOPREV"
+- Haga clic en "Finalizar"
+
+
+================================================================================
+PARTE 4: PRIMERA EJECUCIÓN
+================================================================================
+
+¿Cómo iniciar el programa?
 --------------------------
-1. Prepare la siguiente información:
-   - Versión de MTOPREV (menú Ayuda → Acerca de)
-   - Sistema operativo y versión
-   - Descripción detallada del problema
-   - Capturas de pantalla si es posible
-   - Archivos de log relevantes
+Método 1: Desde el escritorio
+- Busque el icono de MTOPREV en su escritorio
+- Haga doble clic en el icono
 
-CONTACTO:
---------
-• Email: soporte@mtoprev.com
-• Teléfono: +54 11 XXXX-XXXX
-• Horario: Lunes a Viernes 9:00 - 18:00
+Método 2: Desde el menú inicio
+- Haga clic en el botón de INICIO
+- Escriba "MTOPREV"
+- Haga clic en el programa cuando aparezca
 
-ARCHIVOS IMPORTANTES:
---------------------
-• Base de datos: %APPDATA%\mtoprev\mtoprev.db
-• Configuración: %APPDATA%\mtoprev\config.env
-• Logs: %APPDATA%\mtoprev\logs\
 
-BACKUP AUTOMÁTICO:
------------------
-MTOPREV realiza backups automáticos diarios en:
-%APPDATA%\mtoprev\backups\
+La primera vez que abra el programa:
+------------------------------------
+1. Aparecerá una ventana que dice "MTOPREV"
+2. Verá el Dashboard (pantalla principal) con:
+   - Números y estadísticas
+   - Gráficos de colores
+   - Un menú en el lado izquierdo
 
-Se conservan los últimos 30 días de backups.
+¡FELICITACIONES! El programa está instalado correctamente.
+
+
+================================================================================
+PARTE 5: ¿CÓMO CREAR UN ACCESO DIRECTO?
+================================================================================
+
+Si no tiene un icono en el escritorio:
+
+1. Haga clic en el botón de INICIO
+2. Escriba "MTOPREV"
+3. Cuando aparezca el programa, haga clic con el BOTÓN DERECHO sobre él
+4. Seleccione "Abrir ubicación del archivo"
+5. Verá el archivo del programa
+6. Haga clic con el BOTÓN DERECHO sobre el archivo
+7. Seleccione "Enviar a" → "Escritorio (crear acceso directo)"
+
+
+================================================================================
+PARTE 6: ¿CÓMO DESINSTALAR EL PROGRAMA?
+================================================================================
+
+Si necesita quitar el programa:
+
+1. Haga clic en el botón de INICIO
+2. Escriba "Panel de control" y presione ENTER
+3. Haga clic en "Programas"
+4. Haga clic en "Desinstalar un programa"
+5. Busque "MTOPREV" en la lista
+6. Haga clic con el BOTÓN DERECHO sobre él
+7. Seleccione "Desinstalar"
+8. Siga las instrucciones que aparecen
+
+
+================================================================================
+PARTE 7: PROBLEMAS COMUNES Y SOLUCIONES
+================================================================================
+
+PROBLEMA: "No puedo encontrar el archivo que descargué"
+SOLUCIÓN:
+- Presione las teclas CTRL + J en el navegador
+- O vaya a la carpeta "Descargas" de su computadora
+
+PROBLEMA: "El programa no abre cuando hago doble clic"
+SOLUCIÓN:
+- Espere unos segundos, a veces tarda en arrancar
+- Si no funciona, reinicie la computadora e intente de nuevo
+
+PROBLEMA: "Dice que mi Windows no es compatible"
+SOLUCIÓN:
+- Necesita actualizar a Windows 10 o Windows 11
+- Consulte con soporte técnico de su empresa
+
+PROBLEMA: "Se cierra solo al abrirlo"
+SOLUCIÓN:
+1. Haga clic derecho en el icono del programa
+2. Seleccione "Ejecutar como administrador"
+3. Si le pregunta, haga clic en "Sí"
+
+PROBLEMA: "No puedo instalar, me dice que no tengo permisos"
+SOLUCIÓN:
+- Contacte al administrador de sistemas de su empresa
+- Necesita permisos de administrador para instalar programas
+
+
+================================================================================
+PARTE 8: RESPALDO DE DATOS (MUY IMPORTANTE)
+================================================================================
+
+¿Por qué hacer respaldos?
+-------------------------
+Los datos que ingresa al programa (materiales, solicitudes, etc.) 
+se guardan en su computadora. Si la computadora falla, puede perder todo.
+
+Cómo hacer un respaldo:
+-----------------------
+1. Abra MTOPREV
+2. En el menú superior, haga clic en "Herramientas"
+3. Seleccione "Base de Datos" → "Crear Backup"
+4. Aparecerá una ventana para guardar un archivo
+5. Elija una ubicación segura (puede ser un USB)
+6. Haga clic en "Guardar"
+7. Aparecerá un mensaje diciendo "Backup completado"
+
+Se recomienda hacer un respaldo CADA SEMANA.
+
+
+================================================================================
+PARTE 9: CONTACTO Y SOPORTE
+================================================================================
+
+Si tiene problemas que no puede resolver:
+
+Email: soporte@mtoprev.com
+Teléfono: (consulte con su empresa)
+
+Cuando contacte a soporte, tenga a mano:
+- La versión de Windows que tiene
+- Qué pasó exactamente (sea lo más detallado posible)
+- Si apareció algún mensaje de error, escríbalo o tome una foto
 
 
 ================================================================================
@@ -326,4 +253,3 @@ Se conservan los últimos 30 días de backups.
 
 MTOPREV v1.0.0
 Sistema de Gestión de Mantenimiento Preventivo
-© 2024 - Todos los derechos reservados

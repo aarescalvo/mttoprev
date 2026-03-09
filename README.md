@@ -2,19 +2,23 @@
 
 Sistema integral para gestión de mantenimiento en plantas industriales.
 
-## 📥 Descarga e Instalación
+## 📥 DESCARGAS
 
-### Para Usuarios (Sin conocimientos técnicos)
+### Versión 1.0.0 (Actual)
 
-1. Vaya a la sección **[Releases](https://github.com/aarescalvo/mttoprev/releases)** en GitHub
-2. Descargue el archivo `MTOPREV-Setup-1.0.0.exe`
-3. Haga doble clic en el archivo descargado
-4. Siga las instrucciones del asistente de instalación
-5. Al terminar, haga clic en el icono de MTOPREV en el escritorio
+| Sistema Operativo | Archivo | Instrucciones |
+|-------------------|---------|---------------|
+| **Windows 10/11** | [MTOPREV-1.0.0-Windows-Portable.zip](https://github.com/aarescalvo/mttoprev/releases/download/v1.0.0/MTOPREV-1.0.0-Windows-Portable.zip) | Descomprimir y ejecutar `MTOPREV.exe` |
+| **Linux** | [MTOPREV-1.0.0-Linux.AppImage](https://github.com/aarescalvo/mttoprev/releases/download/v1.0.0/MTOPREV-1.0.0-Linux.AppImage) | Dar permisos: `chmod +x MTOPREV-1.0.0.AppImage` y ejecutar |
 
-📖 **Guía completa de instalación:** Ver archivo `INSTALACION.txt` en la carpeta `download`
+### 📖 Documentación
 
-📖 **Manual de uso completo:** Ver archivo `MANUAL_DE_USO.txt` en la carpeta `download`
+| Documento | Descripción |
+|-----------|-------------|
+| [INSTALACION.txt](https://github.com/aarescalvo/mttoprev/releases/download/v1.0.0/INSTALACION.txt) | Guía detallada para usuarios sin experiencia |
+| [MANUAL_DE_USO.txt](https://github.com/aarescalvo/mttoprev/releases/download/v1.0.0/MANUAL_DE_USO.txt) | Manual completo de uso del programa |
+
+---
 
 ## 🎯 Funcionalidades
 
@@ -24,21 +28,32 @@ Sistema integral para gestión de mantenimiento en plantas industriales.
 | 📦 **Stock** | Control de inventario de materiales y repuestos |
 | 🔧 **Herramientas** | Gestión de herramientas y préstamos |
 | 👥 **Personal** | Administración del equipo de mantenimiento |
-| 📋 **Solicitudes** | Gestión completa de solicitudes de trabajo |
+| 📋 **Solicitudes** | Gestión completa de solicitudes de trabajo con seguimiento de insumos |
 | 📅 **Mantenimientos** | Cronograma de mantenimiento preventivo |
 | 💰 **Centro de Costos** | Control de gastos por área |
 | 📈 **Reportes** | Estadísticas y exportación de datos |
 
-## 📋 Flujo de Solicitudes
+---
+
+## 📋 Flujo de Solicitudes de Mantenimiento
 
 ```
-PENDIENTE → APROBADA → ESPERANDO INSUMOS → INSUMOS RECIBIDOS → EN EJECUCIÓN → CERRADA
+┌─────────────┐    ┌─────────────┐    ┌──────────────────┐
+│  PENDIENTE  │───▶│  APROBADA   │───▶│ ESPERANDO INSUMOS│
+└─────────────┘    └─────────────┘    └──────────────────┘
+                                              │
+                                              ▼
+┌─────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│   CERRADA   │◀───│   EN EJECUCIÓN   │◀───│INSUMOS RECIBIDOS│
+└─────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
 Cada estado queda registrado con:
 - Fecha y hora del cambio
 - Usuario responsable
 - Comentarios
+
+---
 
 ## 💻 Requisitos del Sistema
 
@@ -49,16 +64,27 @@ Cada estado queda registrado con:
 | Espacio en disco | 500 MB | 1 GB |
 | Resolución | 1366x768 | 1920x1080 |
 
-## 📁 Documentación Disponible
+---
 
-| Archivo | Descripción |
-|---------|-------------|
-| `INSTALACION.txt` | Guía paso a paso para instalar el programa |
-| `MANUAL_DE_USO.txt` | Manual completo con instrucciones detalladas |
+## 🚀 Instalación Rápida
+
+### Windows:
+1. Descargue el archivo ZIP
+2. Descomprima en cualquier carpeta
+3. Haga doble clic en `MTOPREV.exe`
+4. ¡Listo! El programa se abrirá
+
+### Linux:
+1. Descargue el archivo AppImage
+2. Abra una terminal en la carpeta de descarga
+3. Ejecute: `chmod +x MTOPREV-1.0.0-Linux.AppImage`
+4. Ejecute: `./MTOPREV-1.0.0-Linux.AppImage`
+
+---
 
 ## 🔧 Para Desarrolladores
 
-### Instalación en modo desarrollo
+### Instalación en modo desarrollo:
 
 ```bash
 # Clonar repositorio
@@ -79,22 +105,47 @@ npx prisma db seed
 npm run dev
 ```
 
-### Generar instalador
+### Generar instaladores:
 
 ```bash
-# Windows
-npm run electron:build:win
-
-# macOS
-npm run electron:build:mac
-
 # Linux
 npm run electron:build:linux
+
+# Windows (requiere Windows o Wine)
+npm run electron:build:win
 ```
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+mtoprev/
+├── src/
+│   ├── app/                 # Páginas Next.js
+│   │   ├── stock/          # Módulo de stock
+│   │   ├── herramientas/   # Módulo de herramientas
+│   │   ├── personal/       # Módulo de personal
+│   │   ├── solicitudes/    # Módulo de solicitudes
+│   │   ├── mantenimientos/ # Módulo de mantenimientos
+│   │   ├── centros-costo/  # Módulo de centro de costos
+│   │   └── reportes/       # Módulo de reportes
+│   ├── actions/            # Server Actions
+│   └── components/         # Componentes React
+├── prisma/
+│   └── schema.prisma       # Esquema de base de datos
+├── electron/
+│   └── main.js             # Configuración Electron
+└── download/
+    ├── INSTALACION.txt     # Guía de instalación
+    └── MANUAL_DE_USO.txt   # Manual de usuario
+```
+
+---
 
 ## 📞 Soporte
 
-Para consultas técnicas, contacte al área de sistemas de su empresa.
+Para consultas técnicas, consulte los documentos de instalación y uso incluidos en el release.
 
 ---
 
